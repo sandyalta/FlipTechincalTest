@@ -1,8 +1,12 @@
+import { EvilIcons, Ionicons } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect, useState } from 'react';
-import { FlatList, Pressable, StyleSheet, TouchableOpacity } from 'react-native';
+import { FlatList, Pressable, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import EditScreenInfo from '../components/EditScreenInfo';
+import { convertStatus, DateFormat, FormatAmount, Themes } from '../common/global';
+import { saveData } from '../common/store';
 import { Text, View } from '../components/Themed';
+
 
 interface Props {
     navigation:any,
@@ -13,33 +17,35 @@ export default function ListItem (props: Props) {
   const {navigation, data} = props;
 
   console.log(data)
-  useEffect(() => {
-  }, []);
 
   const getItem = (item:any) => {
+    console.log("SAVE",item)
+    saveData(item);
     navigation.navigate('DetailPage')
   };
 
   const ItemView = (item:any) => {
-    console.log(item);
     return (
-        <Text style={styles.text} onPress={() => getItem(item)}>
-            {item.beneficiary_name.toUpperCase()}
-        </Text>
-    );
-  };
- 
-  const ItemSeparatorView = () => {
-    return (
-      // Flat List Item Separator
-      <View
-        style={{
-          height: 0.5,
-          width: '100%',
-          backgroundColor: '#C8C8C8',
-        }}
-      >
-      </View>
+        <Pressable style={item.status == "SUCCESS" ? styles.itemSucces : styles.itemPending} onPress={() => getItem(item)}>  
+            <View style={styles.item2}>  
+                <View style={styles.contentData}>
+                    <View style={styles.itemRow}>
+                        <Text style={Themes.bold}>{item.sender_bank.toUpperCase()} </Text>
+                        <Ionicons name='arrow-forward-sharp' size={20}/>
+                        <Text style={Themes.bold}>{item.beneficiary_bank.toUpperCase()}</Text>                               
+                    </View>
+                        <Text>{item.beneficiary_name.toUpperCase()}</Text>    
+                    <View style={styles.itemRow}>
+                        <Text>{`Rp ${FormatAmount(item.amount)}`} </Text>
+                        <Ionicons style={styles.iconDot} name='ellipse' size={10}/>
+                        <Text>{DateFormat(item.completed_at)}</Text>                
+                    </View>
+                </View>                    
+                <View style={item.status == "SUCCESS" ? styles.statusSuccess : styles.statusPending}>
+                    <Text style={Themes.white}>{convertStatus(item.status)}</Text>    
+                </View>
+            </View>            
+        </Pressable>
     );
   };
 
@@ -50,7 +56,6 @@ export default function ListItem (props: Props) {
                 data={data}
                 renderItem={({ item }) => ItemView(item)}
                 keyExtractor={(item, index) => index.toString()}
-                ItemSeparatorComponent={ItemSeparatorView}
             />
         }
     </SafeAreaView>
@@ -72,5 +77,102 @@ const styles = StyleSheet.create({
   text: {
     padding: 10,
     margin: 10,
-  }
+  },
+  itemPending: {
+    backgroundColor: 'rgb(255, 255, 255)',
+    padding: 10,
+    marginVertical: 5,
+    marginHorizontal: 5,
+    shadowOffset: { width: 200, height: 200, },
+    shadowColor: '#000',
+    shadowOpacity: 1.0,
+    borderWidth: 1,
+    borderRadius: 10,        
+    borderLeftColor: 'rgb(227, 87, 11)',
+    borderTopColor: 'rgb(255, 255, 255)',
+    borderRightColor : 'rgb(255, 255, 255)',
+    borderBottomColor : 'rgb(255, 255, 255)',
+    borderLeftWidth : 10,
+    marginRight: 5
+  },
+  itemSucces: {
+    backgroundColor: 'rgb(255, 255, 255)',
+    padding: 10,
+    marginVertical: 5,
+    marginHorizontal: 5,
+    shadowOffset: { width: 200, height: 200, },
+    shadowColor: '#000',
+    shadowOpacity: 1.0,
+    borderWidth: 1,
+    borderRadius: 10,        
+    borderLeftColor: 'rgb(83, 183, 137)',
+    borderTopColor: 'rgb(255, 255, 255)',
+    borderRightColor : 'rgb(255, 255, 255)',
+    borderBottomColor : 'rgb(255, 255, 255)',
+    borderLeftWidth : 10,
+    marginRight: 5
+},
+statusPending:{
+    flexDirection: 'row',
+    marginLeft: 'auto',
+    width: 80,
+    alignItems: 'center',
+    height: 40,
+    backgroundColor: 'rgb(227, 87, 11)',
+    padding: 10,        
+    marginVertical: 5,
+    marginHorizontal: 5,        
+    borderWidth: 1,
+    borderColor: 'rgb(255, 255, 255)',
+    borderRadius: 10,
+},
+
+statusSuccess:{
+    flexDirection: 'row',
+    marginLeft: 'auto',
+    width: 80,
+    alignItems: 'center',
+    height: 40,
+    backgroundColor: 'rgb(83, 183, 137)',
+    padding: 10,        
+    marginVertical: 5,
+    marginHorizontal: 5,        
+    borderWidth: 1,
+    borderColor: 'rgb(255, 255, 255)',
+    borderRadius: 10,
+},
+
+item2:{
+    ...Themes.bgWhite,
+    flex: 1,
+    flexDirection: 'row'
+},
+
+contentData: {
+    justifyContent: 'flex-start',
+},
+smallWindow:{        
+    flexDirection: 'row',
+    marginLeft: 'auto',
+    width: 80,
+    alignItems: 'center',
+    height: 40,
+    backgroundColor: 'rgb(227, 87, 11)',
+    padding: 10,        
+    marginVertical: 5,
+    marginHorizontal: 5,        
+    // marginLeft: 100,
+    borderWidth: 1,
+    borderColor: 'rgb(255, 255, 255)',
+    borderRadius: 10,
+},
+itemRow:{
+    flex: 1,
+    flexDirection: 'row'
+},
+iconDot:{
+    alignContent: 'center',
+    marginTop: 5,
+    marginRight: 2,
+}
 });

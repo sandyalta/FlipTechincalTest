@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { ScrollView, ScrollViewComponent, StyleSheet } from 'react-native';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import ListItem from '../components/ListItem';
 import SearchSection from '../components/SearchSection';
 import { View } from '../components/Themed';
