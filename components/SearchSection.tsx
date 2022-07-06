@@ -41,8 +41,8 @@ export default function SearchSection (props: Props) {
                 }}
             >
                 <View style={styles.sortContainer}>
-                <Text style={styles.sortText}>{sortedName}</Text>
-                <Ionicons style={styles.sortIcon} name={'chevron-down'} size={18} color="#000"/>
+                    <Text style={styles.sortText}>{sortedName}</Text>
+                    <Ionicons style={styles.sortIcon} name={'chevron-down'} size={18} color="#000"/>
                 </View>
             </Pressable>
         </View>

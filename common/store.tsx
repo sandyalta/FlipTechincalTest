@@ -9,12 +9,3 @@ export const saveData = async (item:any) => {
       alert('Failed to save the data to the storage')
     }
 }
-
-export const clearStorage = async () => {
-  try {
-    await AsyncStorage.clear();
-    alert('Storage successfully cleared!');
-  } catch (e) {
-    alert('Failed to clear the async storage.');
-  }
-};
