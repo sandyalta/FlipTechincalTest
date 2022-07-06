@@ -1,9 +1,7 @@
-import { EvilIcons, Ionicons } from '@expo/vector-icons';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useEffect, useState } from 'react';
+import { Ionicons } from '@expo/vector-icons';
 import { FlatList, Pressable, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { convertStatus, DateFormat, FormatAmount, Themes } from '../common/global';
+import { convertStatus, DateFormat, FormatAmount, UIConstant } from '../common/global';
 import { saveData } from '../common/store';
 import { Text, View } from '../components/Themed';
 
@@ -16,10 +14,7 @@ interface Props {
 export default function ListItem (props: Props) {
   const {navigation, data} = props;
 
-  console.log(data)
-
   const getItem = (item:any) => {
-    console.log("SAVE",item)
     saveData(item);
     navigation.navigate('DetailPage')
   };
@@ -30,9 +25,9 @@ export default function ListItem (props: Props) {
             <View style={styles.item2}>  
                 <View style={styles.contentData}>
                     <View style={styles.itemRow}>
-                        <Text style={Themes.bold}>{item.sender_bank.toUpperCase()} </Text>
+                        <Text style={UIConstant.bold}>{item.sender_bank.toUpperCase()} </Text>
                         <Ionicons name='arrow-forward-sharp' size={20}/>
-                        <Text style={Themes.bold}>{item.beneficiary_bank.toUpperCase()}</Text>                               
+                        <Text style={UIConstant.bold}>{item.beneficiary_bank.toUpperCase()}</Text>                               
                     </View>
                         <Text>{item.beneficiary_name.toUpperCase()}</Text>    
                     <View style={styles.itemRow}>
@@ -42,7 +37,7 @@ export default function ListItem (props: Props) {
                     </View>
                 </View>                    
                 <View style={item.status == "SUCCESS" ? styles.statusSuccess : styles.statusPending}>
-                    <Text style={Themes.white}>{convertStatus(item.status)}</Text>    
+                    <Text style={UIConstant.white}>{convertStatus(item.status)}</Text>    
                 </View>
             </View>            
         </Pressable>
@@ -143,7 +138,7 @@ statusSuccess:{
 },
 
 item2:{
-    ...Themes.bgWhite,
+    ...UIConstant.bgWhite,
     flex: 1,
     flexDirection: 'row'
 },

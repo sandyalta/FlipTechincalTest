@@ -3,7 +3,7 @@ import { Dimensions, StyleSheet } from "react-native";
 const deviceWidth = Dimensions.get("window").width;
 const deviceHeight = Dimensions.get("window").height;
 
-export const Themes = StyleSheet.create({
+export const UIConstant = StyleSheet.create({
     fl1:{
         flex: 1
     },
@@ -19,9 +19,15 @@ export const Themes = StyleSheet.create({
     fullWidth: {
         width: deviceWidth
     },
-    bold: { fontWeight: 'bold' },
-    italic: { fontStyle: 'italic' },
-    underline: { textDecorationLine: 'underline' },
+    bold: { 
+        fontWeight: 'bold' 
+    },
+    italic: { 
+        fontStyle: 'italic' 
+    },
+    underline: { 
+        textDecorationLine: 'underline'
+    },
 });
 
 export const globalItems = {
@@ -56,3 +62,26 @@ export const convertStatus = (statusText:any) => {
 
     return returnText;``
 }
+
+export const sortList = [
+    {
+        label:'URUTKAN',
+        value: ''
+    },
+    {
+        label: 'Nama A-Z',
+        value: 'asc',
+    },
+    {
+        label: 'Nama Z-A',
+        value: 'dsc',
+    },
+    {
+        label: 'Tanggal Terbaru',
+        value: 'newDate',
+    },
+    {
+        label: 'Tanggal Terlama',
+        value: 'oldDate'
+    }
+]

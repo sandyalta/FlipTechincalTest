@@ -1,25 +1,25 @@
 import { EvilIcons, Ionicons } from '@expo/vector-icons';
-import { useEffect, useState } from 'react';
-import { Keyboard, Pressable, StyleSheet, TextInput } from 'react-native';
+import { useEffect, useRef, useState } from 'react';
+import { Keyboard, Modal, Pressable, StyleSheet, TextInput } from 'react-native';
+import { sortList } from '../common/global';
 
 import { Text, View } from '../components/Themed';
 
 interface Props {
     onSearchAction: Function;
     search: string;
+    changeModalVisibility: Function;
+    sortedType: string;
 }
 
 export default function SearchSection (props: Props) {
-    const {onSearchAction, search} = props;
+    const {onSearchAction, search, changeModalVisibility, sortedType } = props;
 
     useEffect(() => {
         
     }, []);
 
-    const sortFunction = () => {
-        
-    };
-
+    const sortedName = sortList.find((x:any) => x.value == sortedType)?.label;
     return (
         <View style={styles.searchContainer}>
             <EvilIcons style={styles.searchIcon} name={'search'} size={20} color="#000"/>
@@ -32,16 +32,16 @@ export default function SearchSection (props: Props) {
             />
             <Pressable
                 style={({ pressed }) => ({
-                opacity: pressed ? 0.5 : 1,
-                width: '20%'
+                    opacity: pressed ? 0.5 : 1,
+                    width: '20%'
                 })}
-                onPress={() =>{
-                Keyboard.dismiss();
-                sortFunction();
+                onPress={() => {
+                    Keyboard.dismiss();
+                    changeModalVisibility(true);
                 }}
             >
                 <View style={styles.sortContainer}>
-                <Text style={styles.sortText}>{"URUTKAN"}</Text>
+                <Text style={styles.sortText}>{sortedName}</Text>
                 <Ionicons style={styles.sortIcon} name={'chevron-down'} size={18} color="#000"/>
                 </View>
             </Pressable>

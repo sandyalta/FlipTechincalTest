@@ -3,10 +3,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState } from 'react';
 import { Platform, Pressable, ScrollView, StyleSheet } from 'react-native';
-import { DateFormat, FormatAmount, globalItems, Themes } from '../common/global';
+import { DateFormat, FormatAmount, globalItems, UIConstant } from '../common/global';
 import { STORAGE_KEY } from '../common/store';
 
-import EditScreenInfo from '../components/EditScreenInfo';
 import { Text, View } from '../components/Themed';
 import { RootTabScreenProps } from '../types';
 
@@ -65,12 +64,12 @@ export default function DetailPageScreen({ navigation }: RootTabScreenProps<'Tra
       <ScrollView>
         <View style={styles.containerDetail}>
           <View style={[styles.itemRow, styles.marginLeft]}>
-            <Text style={Themes.bold}>{`ID TRANSAKSI: #${data.id}`}</Text>
-            <Ionicons name='md-copy-outline' size={20}/>
+            <Text style={UIConstant.bold}>{`ID TRANSAKSI: #${data.id}`}</Text>
+            <Ionicons style={[styles.exitText, {marginLeft: 5}]} name='md-copy-outline' size={20}/>
           </View>
           <View style={styles.separator} lightColor="#eee" darkColor="rgb(85, 89, 89)" />
           <View style={[styles.itemRow, styles.marginLeft,  styles.seperateRow]}>
-            <Text style={Themes.bold}>{`DETAIL TRANSAKSI`}</Text>
+            <Text style={UIConstant.bold}>{`DETAIL TRANSAKSI`}</Text>
             <Pressable onPress={() => navigation.navigate('TransactionListPage')}>
               <Text style={styles.exitText}>{"Tutup"}</Text>
             </Pressable>
@@ -78,32 +77,32 @@ export default function DetailPageScreen({ navigation }: RootTabScreenProps<'Tra
           <View style={styles.separator} lightColor="#eee" darkColor="rgb(85, 89, 89)" />
           <View style={styles.contentData}>
               <View style={styles.itemRow}>
-                  <Text style={Themes.bold}>{data.senderBank.toUpperCase()} </Text>
+                  <Text style={UIConstant.bold}>{data.senderBank.toUpperCase()} </Text>
                   <Ionicons name='arrow-forward-sharp' size={22}/>
-                  <Text style={[Themes.bold, {marginLeft:10}]}>{data.beneficiaryBank.toUpperCase()}</Text>                               
+                  <Text style={[UIConstant.bold, {marginLeft:10}]}>{data.beneficiaryBank.toUpperCase()}</Text>                               
               </View>
               <View style={[styles.itemRow, styles.seperateRow]}>
                 <View>
-                  <Text style={Themes.bold}>{data.beneficiaryName.toUpperCase()} </Text>
+                  <Text style={UIConstant.bold}>{`- ${data.beneficiaryName.toUpperCase()}`} </Text>
                   <Text>{data.account_number}</Text>    
                 </View>  
                 <View style={styles.lastUnit}>
-                  <Text style={Themes.bold}>{"NOMINAL"} </Text>
+                  <Text style={UIConstant.bold}>{"NOMINAL"} </Text>
                   <Text>{`Rp ${FormatAmount(data.amount)}`} </Text>
                 </View>                         
               </View>
               <View style={[styles.itemRow, styles.seperateRow]}>
                 <View>
-                  <Text style={Themes.bold}>{"BERITA TRANSFER"} </Text>
+                  <Text style={UIConstant.bold}>{"BERITA TRANSFER"} </Text>
                   <Text>{data.remarks}</Text>    
                 </View>  
                 <View style={[styles.lastUnit, {marginEnd:10}]}>
-                  <Text style={Themes.bold}>{"KODE UNIK"} </Text>
+                  <Text style={UIConstant.bold}>{"KODE UNIK"} </Text>
                   <Text>{data.uniqueCode} </Text>
                 </View>                         
               </View>
               <View>
-                  <Text style={Themes.bold}>{"WAKTU DIBUAT"} </Text>
+                  <Text style={UIConstant.bold}>{"WAKTU DIBUAT"} </Text>
                   <Text>{DateFormat(data.createdDate)} </Text>
               </View> 
           </View> 

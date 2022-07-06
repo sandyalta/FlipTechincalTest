@@ -1,14 +1,16 @@
-import { useEffect, useState } from 'react';
-import { ScrollView, ScrollViewComponent, StyleSheet } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useEffect, useRef, useState } from 'react';
+import { Modal, ScrollView, ScrollViewComponent, StyleSheet } from 'react-native';
+import { sortList } from '../common/global';
 import ListItem from '../components/ListItem';
 import SearchSection from '../components/SearchSection';
+import SortModalList from '../components/SortModalList';
 import { View } from '../components/Themed';
 import { RootTabScreenProps } from '../types';
 
 export default function TransactionListScreen({ navigation }: RootTabScreenProps<'TransactionListPage'>) {
   const [data, setData] = useState([]);
   const [search, setSearch] = useState('');
+  const [sortedType, setSortedType] = useState('');
   const [originalData, setOriginalData] = useState([]);
 
   useEffect(() => {
@@ -58,14 +60,58 @@ export default function TransactionListScreen({ navigation }: RootTabScreenProps
     }
   };
 
+  const [modalOpen, setModalOpen] = useState(false);
+  const changeModalVisibility = (bool:boolean) => {
+    setModalOpen(bool);
+  }
+
+  const sortFunction = (value:any) => {
+    let tempData= data;
+    if(value == "" || value == undefined){
+      setData(originalData);
+      setSortedType(value);
+    }
+    else if(value == "asc"){
+      tempData = data.sort((a: any,b :any) => {
+        return a.beneficiary_name > b.beneficiary_name ? 1 : -1
+      })
+    }
+    else if(value == 'dsc'){
+      tempData = data.sort((a: any,b :any) => {
+        return b.beneficiary_name > a.beneficiary_name ? 1 : -1
+      })
+    }
+    else if(value == 'newDate'){
+      tempData = data.sort((a: any,b :any) => {
+        return a.completed_at > b.completed_at ? 1 : -1
+      })
+    }
+    else if(value == 'oldDate'){
+      tempData = data.sort((a: any,b :any) => {
+        return b.completed_at > a.completed_at ? 1 : -1
+      })
+    }
+    setData(tempData);
+    changeModalVisibility(false);
+    setSortedType(value);
+
+  }
+
 
   return (
       <View style={styles.container}>
-        <SearchSection onSearchAction={(text:any) => searchFilterFunction(text)} search={search}></SearchSection>
+        <SearchSection onSearchAction={(text:any) => searchFilterFunction(text)} search={search} changeModalVisibility={changeModalVisibility} sortedType={sortedType} ></SearchSection>
         <ScrollView>
           { data && <ListItem data={data} navigation={navigation}></ListItem>}
         </ScrollView>
-        {/* <EditScreenInfo path="/screens/TransactionListScreen.tsx" /> */}
+        <Modal
+          transparent={true}
+          animationType={'fade'}
+          visible={modalOpen}
+          onRequestClose={() => changeModalVisibility(false)}
+        >
+          <SortModalList onSortFunction={(value:any) => sortFunction(value)} changeModalVisibility={changeModalVisibility} sortedType={sortedType}></SortModalList>
+        </Modal>
       </View>
   );
 }
